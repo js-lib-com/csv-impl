@@ -156,7 +156,7 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   public void load(List<String> header)
   {
     for(String columnName : header) {
-      column(Strings.toMemberName(columnName), null);
+      column(Strings.dashedToMemberName(columnName), null);
     }
   }
 
@@ -173,7 +173,7 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   public CsvDescriptor<T> columns(Class<? extends Enum<?>> columnNames)
   {
     for(Enum<?> columnName : columnNames.getEnumConstants()) {
-      columns.add(new CsvColumnImpl(Strings.toMemberName(columnName.name()), null));
+      columns.add(new CsvColumnImpl(Strings.enumToMemberName(columnName), null));
     }
     return this;
   }
