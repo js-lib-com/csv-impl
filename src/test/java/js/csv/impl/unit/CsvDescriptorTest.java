@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.Description;
@@ -44,7 +45,21 @@ public class CsvDescriptorTest
   }
 
   @Test
+  public void config_Delimiter_Enum() throws ConfigException
+  {
+    CsvDescriptor<Person> descriptor = descriptor("config-delimiter.xml");
+    assertThat(descriptor.format().delimiter(), equalTo(';'));
+  }
+
+  @Test
   public void config_Comment() throws ConfigException
+  {
+    CsvDescriptor<Person> descriptor = descriptor("config-comment.xml");
+    assertThat(descriptor.format().comment(), equalTo('/'));
+  }
+
+  @Test
+  public void config_Comment_Enum() throws ConfigException
   {
     CsvDescriptor<Person> descriptor = descriptor("config-comment.xml");
     assertThat(descriptor.format().comment(), equalTo('/'));
@@ -54,6 +69,14 @@ public class CsvDescriptorTest
   public void config_Quote() throws ConfigException
   {
     CsvDescriptor<Person> descriptor = descriptor("config-quote.xml");
+    assertThat(descriptor.format().openQuote(), equalTo('\''));
+    assertThat(descriptor.format().closeQuote(), equalTo('\''));
+  }
+
+  @Test
+  public void config_Quote_Enum() throws ConfigException
+  {
+    CsvDescriptor<Person> descriptor = descriptor("config-quote-enum.xml");
     assertThat(descriptor.format().openQuote(), equalTo('\''));
     assertThat(descriptor.format().closeQuote(), equalTo('\''));
   }
@@ -80,37 +103,44 @@ public class CsvDescriptorTest
   }
 
   @Test
+  public void config_Escape_Enum() throws ConfigException
+  {
+    CsvDescriptor<Person> descriptor = descriptor("config-escape-enum.xml");
+    assertThat(descriptor.format().escape(), equalTo('\\'));
+  }
+
+  @Test
   public void config_header() throws ConfigException
   {
-    CsvDescriptor<Person> descriptor =  descriptor("config-header.xml");
+    CsvDescriptor<Person> descriptor = descriptor("config-header.xml");
     assertTrue(descriptor.format().header());
   }
 
   @Test
   public void config_EmptyLines() throws ConfigException
   {
-    CsvDescriptor<Person> descriptor =   descriptor("config-empty-lines.xml");
+    CsvDescriptor<Person> descriptor = descriptor("config-empty-lines.xml");
     assertFalse(descriptor.format().emptyLines());
   }
 
   @Test
   public void config_Trim() throws ConfigException
   {
-    CsvDescriptor<Person> descriptor =    descriptor("config-trim.xml");
+    CsvDescriptor<Person> descriptor = descriptor("config-trim.xml");
     assertFalse(descriptor.format().trim());
   }
 
   @Test
   public void config_Charset() throws ConfigException
   {
-    CsvDescriptor<Person> descriptor =    descriptor("config-charset.xml");
+    CsvDescriptor<Person> descriptor = descriptor("config-charset.xml");
     assertThat(descriptor.format().charset(), equalTo(Charset.forName("ISO-8859-2")));
   }
 
   @Test
   public void config_Strict() throws ConfigException
   {
-    CsvDescriptor<Person> descriptor =     descriptor("config-strict.xml");
+    CsvDescriptor<Person> descriptor = descriptor("config-strict.xml");
     assertTrue(descriptor.format().strict());
   }
 
@@ -166,6 +196,67 @@ public class CsvDescriptorTest
     assertThat(descriptor.columns().get(0).formatter(), Matchers.nullValue());
     assertThat(descriptor.columns().get(1).fieldName(), equalTo("postalAddress"));
     assertThat(descriptor.columns().get(1).formatter(), Matchers.nullValue());
+  }
+
+  @Test
+  public void load_JavaNames()
+  {
+    @SuppressWarnings("unused")
+    class Record {
+      String name;
+      String postalAddress;
+      String phone_number;
+      String _parking_code_;
+      String IBAN;
+    }
+    
+    CsvDescriptor<Record> descriptor = new CsvDescriptorImpl<>(Record.class);
+    descriptor.load(Arrays.asList("name", "postalAddress", "phone_number", "_parking_code_", "IBAN"));
+  }
+
+  @Test
+  public void load_LowerCaseNames()
+  {
+    @SuppressWarnings("unused")
+    class Record {
+      String name;
+      String postalAddress;
+      String phoneNumber;
+      String parkingCode;
+    }
+    
+    CsvDescriptor<Record> descriptor = new CsvDescriptorImpl<>(Record.class);
+    descriptor.load(Arrays.asList("name", "postal_address", "phone-number", "parking code"));
+  }
+
+  @Test
+  public void load_UpperCaseNames()
+  {
+    @SuppressWarnings("unused")
+    class Record {
+      String name;
+      String postalAddress;
+      String phoneNumber;
+      String parkingCode;
+    }
+    
+    CsvDescriptor<Record> descriptor = new CsvDescriptorImpl<>(Record.class);
+    descriptor.load(Arrays.asList("NAME", "POSTAL_ADDRESS", "PHONE-NUMBER", "PARKING CODE"));
+  }
+
+  @Test
+  public void load_MixedCaseNames()
+  {
+    @SuppressWarnings("unused")
+    class Record {
+      String name;
+      String postalAddress;
+      String phoneNumber;
+      String parkingCode;
+    }
+    
+    CsvDescriptor<Record> descriptor = new CsvDescriptorImpl<>(Record.class);
+    descriptor.load(Arrays.asList("NAME", "POSTAL_ADDRESS", "phone-number", "parking code"));
   }
 
   // ----------------------------------------------------------------------------------------------

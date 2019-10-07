@@ -1,11 +1,21 @@
 package js.csv.impl;
 
+import static js.util.Params.notNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import js.csv.CharEnum;
 import js.csv.CsvColumn;
+import js.csv.CsvComment;
+import js.csv.CsvDelimiter;
 import js.csv.CsvDescriptor;
+import js.csv.CsvEscape;
+import js.csv.CsvException;
 import js.csv.CsvFormat;
+import js.csv.CsvQuote;
 import js.format.Format;
 import js.lang.Config;
 import js.lang.ConfigException;
@@ -21,7 +31,7 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
 
   public CsvDescriptorImpl(Class<T> type)
   {
-    Params.notNull(type, "Descriptor type");
+    notNull(type, "Descriptor type");
     this.format = new CsvFormatImpl();
     this.type = type;
   }
@@ -31,8 +41,8 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
    */
   public CsvDescriptorImpl(CsvFormatImpl format, Class<T> type)
   {
-    Params.notNull(format, "CSV format");
-    Params.notNull(type, "Descriptor type");
+    notNull(format, "CSV format");
+    notNull(type, "Descriptor type");
     this.format = format;
     this.type = type;
   }
@@ -40,7 +50,7 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @SuppressWarnings("unchecked")
   public CsvDescriptorImpl(Config config) throws ConfigException
   {
-    Params.notNull(config, "Descriptor configuration");
+    notNull(config, "Descriptor configuration");
     this.format = new CsvFormatImpl();
     this.type = config.getAttribute("class", Class.class);
     if(this.type == null) {
@@ -52,8 +62,8 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @SuppressWarnings("unchecked")
   public CsvDescriptorImpl(Class<T> type, Config config) throws ConfigException
   {
-    Params.notNull(type, "Descriptor type");
-    Params.notNull(config, "Descriptor configuration");
+    notNull(type, "Descriptor type");
+    notNull(config, "Descriptor configuration");
 
     this.format = new CsvFormatImpl();
     this.type = config.getAttribute("class", Class.class);
@@ -73,14 +83,15 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
     }
 
     if(config.hasAttribute("delimiter")) {
-      format.delimiter(config.getAttribute("delimiter", char.class));
+      format.delimiter(charEnum(config, "delimiter", CsvDelimiter.class).value());
     }
     if(config.hasAttribute("comment")) {
-      format.comment(config.getAttribute("comment", char.class));
+      format.comment(charEnum(config, "comment", CsvComment.class).value());
     }
 
     if(config.hasAttribute("quote")) {
-      format.quote(config.getAttribute("quote", char.class));
+      CharEnum charEnum = charEnum(config, "quote", CsvQuote.class);
+      format.quote(charEnum.value(0), charEnum.value(1));
     }
     if(config.hasAttribute("open-quote")) {
       char openQuote = config.getAttribute("open-quote", char.class);
@@ -92,7 +103,7 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
     }
 
     if(config.hasAttribute("escape")) {
-      format.escape(config.getAttribute("escape", char.class));
+      format.escape(charEnum(config, "escape", CsvEscape.class).value());
     }
     if(config.hasAttribute("header")) {
       format.header(config.getAttribute("header", boolean.class));
@@ -155,15 +166,30 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @Override
   public void load(List<String> header)
   {
+    if(!columns.isEmpty()) {
+      return;
+    }
+
+    String columns = Strings.join(header, ',');
+    NameConverter converter = JavaName.accept(columns) ? new JavaName() : new NonJavaName();
+
     for(String columnName : header) {
-      column(Strings.dashedToMemberName(columnName), null);
+      String fieldName = converter.fieldName(columnName);
+      if(Classes.getOptionalFieldEx(type, fieldName) == null) {
+        throw new CsvException("Field |%s| not found on type |%s|.", fieldName, type);
+      }
+      column(fieldName, null);
     }
   }
 
   @Override
   public CsvDescriptor<T> columns(String... fieldNames)
   {
+    columns.clear();
     for(String fieldName : fieldNames) {
+      if(format.strict() && Classes.getOptionalFieldEx(type, fieldName) == null) {
+        throw new CsvException("Field |%s| not found on type |%s|.", fieldName, type);
+      }
       columns.add(new CsvColumnImpl(fieldName, null));
     }
     return this;
@@ -172,8 +198,16 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @Override
   public CsvDescriptor<T> columns(Class<? extends Enum<?>> columnNames)
   {
+    Params.notNull(columnNames, "Column names");
+    NameConverter converter = new NonJavaName();
+
+    columns.clear();
     for(Enum<?> columnName : columnNames.getEnumConstants()) {
-      columns.add(new CsvColumnImpl(Strings.enumToMemberName(columnName), null));
+      String fieldName = converter.fieldName(columnName.name());
+      if(format.strict() && Classes.getOptionalFieldEx(type, fieldName) == null) {
+        throw new CsvException("Field |%s| not found on type |%s|.", fieldName, type);
+      }
+      columns.add(new CsvColumnImpl(fieldName, null));
     }
     return this;
   }
@@ -181,6 +215,10 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @Override
   public CsvDescriptor<T> column(String fieldName)
   {
+    Params.notNullOrEmpty(fieldName, "Field name");
+    if(format.strict() && Classes.getOptionalFieldEx(type, fieldName) == null) {
+      throw new CsvException("Field |%s| not found on type |%s|.", fieldName, type);
+    }
     columns.add(new CsvColumnImpl(fieldName, null));
     return this;
   }
@@ -188,6 +226,10 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   @Override
   public CsvDescriptor<T> column(String fieldName, Format formatter)
   {
+    Params.notNullOrEmpty(fieldName, "Field name");
+    if(format.strict() && Classes.getOptionalFieldEx(type, fieldName) == null) {
+      throw new CsvException("Field |%s| not found on type |%s|.", fieldName, type);
+    }
     columns.add(new CsvColumnImpl(fieldName, formatter));
     return this;
   }
@@ -199,6 +241,31 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
   }
 
   // ----------------------------------------------------------------------------------------------
+
+  private static <E extends Enum<E>> CharEnum charEnum(Config config, String attr, Class<E> enumType)
+  {
+    class Char implements CharEnum
+    {
+      private char c;
+
+      public Char(char c)
+      {
+        this.c = c;
+      }
+
+      @Override
+      public char value(int... index)
+      {
+        return c;
+      }
+    }
+
+    String value = config.getAttribute(attr);
+    if(value.length() == 1) {
+      return new Char(value.charAt(0));
+    }
+    return (CharEnum)Enum.valueOf(enumType, value);
+  }
 
   private static final class CsvColumnImpl implements CsvColumn
   {
@@ -221,6 +288,54 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
     public Format formatter()
     {
       return formatter;
+    }
+  }
+
+  private interface NameConverter
+  {
+    String fieldName(String name);
+  }
+
+  private static class JavaName implements NameConverter
+  {
+    private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_,]+$");
+
+    public static boolean accept(String columns)
+    {
+      Matcher matcher = PATTERN.matcher(columns);
+      return matcher.find();
+    }
+
+    @Override
+    public String fieldName(String fieldName)
+    {
+      return fieldName;
+    }
+  }
+
+  private static class NonJavaName implements NameConverter
+  {
+    @Override
+    public String fieldName(String columnName)
+    {
+      List<String> words = Strings.split(columnName, '-', '_', ' ');
+      StringBuilder sb = new StringBuilder();
+
+      boolean first = true;
+      for(String word : words) {
+        if(word.isEmpty()) {
+          continue;
+        }
+        if(first) {
+          first = false;
+          sb.append(word.toLowerCase());
+          continue;
+        }
+
+        sb.append(Character.toUpperCase(word.charAt(0)));
+        sb.append(word.substring(1).toLowerCase());
+      }
+      return sb.toString();
     }
   }
 }

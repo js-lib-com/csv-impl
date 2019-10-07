@@ -41,7 +41,7 @@ public class CsvFormatTest
   public void quote_Enumeration()
   {
     CsvFormatImpl format = new CsvFormatImpl();
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     assertThat(format.openQuote(), equalTo('['));
     assertThat(format.closeQuote(), equalTo(']'));
     assertThat(format.escape(), equalTo('"'));

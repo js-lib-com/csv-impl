@@ -47,7 +47,7 @@ public class CsvWriterTest
   @Test
   public void quote_SquareBrackets() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     String result = exercise();
     assertThat(result, equalTo("[John Doe],[Romania]\r\n[Baby Doe],[United States]\r\n"));
   }

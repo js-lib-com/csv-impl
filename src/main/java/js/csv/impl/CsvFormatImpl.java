@@ -7,32 +7,21 @@ import js.csv.CsvDelimiter;
 import js.csv.CsvEscape;
 import js.csv.CsvFormat;
 import js.csv.CsvQuote;
+import js.util.Params;
 
 public class CsvFormatImpl implements CsvFormat
 {
-  private static final char DEF_DELIMITER_CHAR = ',';
-  private static final char DEF_COMMENT_CHAR = '#';
-  private static final char DEF_OPEN_QUOTE_CHAR = '"';
-  private static final char DEF_CLOSE_QUOTE_CHAR = '"';
-  private static final char DEF_ESCAPE_CHAR = '"';
-  private static final boolean DEF_HEADER = false;
-  private static final boolean DEF_EMPTY_LINES = false;
-  private static final boolean DEF_TRIM = true;
-  private static final Charset DEF_CHARSET = Charset.forName("UTF-8");
-  private static final String DEF_NULL_VALUE = "NULL";
-  private static final boolean DEF_STRICT = false;
-
-  private char delimiterChar = DEF_DELIMITER_CHAR;
-  private char commentChar = DEF_COMMENT_CHAR;
-  private char openQuoteChar = DEF_OPEN_QUOTE_CHAR;
-  private char closeQuoteChar = DEF_CLOSE_QUOTE_CHAR;
-  private char escapeChar = DEF_ESCAPE_CHAR;
-  private boolean header = DEF_HEADER;
-  private boolean emptyLines = DEF_EMPTY_LINES;
-  private boolean trim = DEF_TRIM;
-  private Charset charset = DEF_CHARSET;
-  private String nullValue = DEF_NULL_VALUE;
-  private boolean strict = DEF_STRICT;
+  private char delimiterChar = ',';
+  private char commentChar = '#';
+  private char openQuoteChar = '"';
+  private char closeQuoteChar = '"';
+  private char escapeChar = '"';
+  private boolean header = false;
+  private boolean emptyLines = false;
+  private boolean trim = true;
+  private String nullValue = "NULL";
+  private Charset charset = Charset.forName("UTF-8");
+  private boolean strict = false;
 
   /**
    * Create CSV format with default properties.
@@ -41,28 +30,18 @@ public class CsvFormatImpl implements CsvFormat
   {
   }
 
-  /**
-   * Set the character used to separate record values. This method just delegates {@link #delimiter(char)}.
-   * 
-   * @param delimiter values separator.
-   * @return this pointer.
-   */
+  @Override
+  public CsvFormatImpl delimiter(char delimiter)
+  {
+    Params.notNull(delimiter, "Delimiter character");
+    this.delimiterChar = delimiter;
+    return this;
+  }
+
+  @Override
   public CsvFormatImpl delimiter(CsvDelimiter delimiter)
   {
     return delimiter(delimiter.value());
-  }
-
-  /**
-   * Set the character used to separate record values, both simple and complex. Given delimiter character should not be
-   * present in value itself. If value contains delimiter it should be quoted.
-   * 
-   * @param delimiter character used to separate record values.
-   * @return this pointer.
-   */
-  public CsvFormatImpl delimiter(char delimiter)
-  {
-    this.delimiterChar = delimiter;
-    return this;
   }
 
   @Override
@@ -71,12 +50,14 @@ public class CsvFormatImpl implements CsvFormat
     return delimiterChar;
   }
 
+  @Override
   public CsvFormatImpl comment(char commentChar)
   {
     this.commentChar = commentChar;
     return this;
   }
 
+  @Override
   public CsvFormatImpl comment(CsvComment comment)
   {
     this.commentChar = comment.value();
@@ -89,22 +70,25 @@ public class CsvFormatImpl implements CsvFormat
     return commentChar;
   }
 
+  @Override
   public CsvFormatImpl quote(char quoteChar)
   {
     quote(quoteChar, quoteChar);
     return this;
   }
 
-  public CsvFormatImpl quote(CsvQuote quote)
-  {
-    quote(quote.open(), quote.close());
-    return this;
-  }
-
+  @Override
   public CsvFormatImpl quote(char openQuoteChar, char closeQuoteChar)
   {
     this.openQuoteChar = openQuoteChar;
     this.closeQuoteChar = closeQuoteChar;
+    return this;
+  }
+
+  @Override
+  public CsvFormatImpl quote(CsvQuote quote)
+  {
+    quote(quote.value(0), quote.value(1));
     return this;
   }
 
@@ -120,12 +104,14 @@ public class CsvFormatImpl implements CsvFormat
     return closeQuoteChar;
   }
 
+  @Override
   public CsvFormatImpl escape(char escapeChar)
   {
     this.escapeChar = escapeChar;
     return this;
   }
 
+  @Override
   public CsvFormatImpl escape(CsvEscape escape)
   {
     this.escapeChar = escape.value();
@@ -138,6 +124,7 @@ public class CsvFormatImpl implements CsvFormat
     return escapeChar;
   }
 
+  @Override
   public CsvFormatImpl header(boolean header)
   {
     this.header = header;
@@ -150,6 +137,7 @@ public class CsvFormatImpl implements CsvFormat
     return header;
   }
 
+  @Override
   public CsvFormatImpl emptyLines(boolean emptyLines)
   {
     this.emptyLines = emptyLines;
@@ -169,6 +157,7 @@ public class CsvFormatImpl implements CsvFormat
    * @param trim flag for value white space trimming.
    * @return this pointer.
    */
+  @Override
   public CsvFormatImpl trim(boolean trim)
   {
     this.trim = trim;
@@ -181,6 +170,7 @@ public class CsvFormatImpl implements CsvFormat
     return trim;
   }
 
+  @Override
   public CsvFormatImpl charset(String charset)
   {
     this.charset = Charset.forName(charset);
@@ -193,6 +183,7 @@ public class CsvFormatImpl implements CsvFormat
     return charset;
   }
 
+  @Override
   public CsvFormatImpl nullValue(String nullValue)
   {
     this.nullValue = nullValue;
@@ -205,6 +196,7 @@ public class CsvFormatImpl implements CsvFormat
     return nullValue;
   }
 
+  @Override
   public CsvFormatImpl strict(boolean strict)
   {
     this.strict = strict;

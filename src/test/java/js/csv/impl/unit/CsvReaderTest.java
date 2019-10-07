@@ -575,7 +575,7 @@ public class CsvReaderTest
   @Test
   public void complexValue_SquareBrackets() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     List<Person> persons = exercise("/complex-value-square-brackets.csv");
 
     assertThat(persons, notNullValue());
@@ -588,7 +588,7 @@ public class CsvReaderTest
   @Test
   public void complexValue_SquareBrackets_WithCRLF() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     format.escape(CsvEscape.BACKSLASH);
     List<Person> persons = exercise("/complex-value-square-brackets-with-crlf.csv");
 
@@ -602,7 +602,7 @@ public class CsvReaderTest
   @Test
   public void complexValue_SquareBrackets_Trim() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     format.escape(CsvEscape.BACKSLASH);
     List<Person> persons = exercise("/complex-value-square-brackets-trim.csv");
 
@@ -616,7 +616,7 @@ public class CsvReaderTest
   @Test
   public void complexValue_SquareBrackets_Trim_Disabled() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     format.escape(CsvEscape.BACKSLASH);
     format.trim(false);
     List<Person> persons = exercise("/complex-value-square-brackets-trim.csv");
@@ -631,7 +631,7 @@ public class CsvReaderTest
   @Test
   public void complexValue_SquareBrackets_Escape() throws IOException
   {
-    format.quote(CsvQuote.SQUARE_BRCKETS);
+    format.quote(CsvQuote.SQUARE_BRACKETS);
     format.escape(CsvEscape.BACKSLASH);
     List<Person> persons = exercise("/complex-value-square-brackets-escape.csv");
 
