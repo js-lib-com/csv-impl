@@ -47,29 +47,21 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
     this.type = type;
   }
 
-  @SuppressWarnings("unchecked")
   public CsvDescriptorImpl(Config config) throws ConfigException
   {
     notNull(config, "Descriptor configuration");
     this.format = new CsvFormatImpl();
-    this.type = config.getAttribute("class", Class.class);
-    if(this.type == null) {
-      throw new ConfigException("Invalid CSV descriptor configuration. Missing <class> attribute.");
-    }
+    this.type = getType(config);
     config(config);
   }
 
-  @SuppressWarnings("unchecked")
   public CsvDescriptorImpl(Class<T> type, Config config) throws ConfigException
   {
     notNull(type, "Descriptor type");
     notNull(config, "Descriptor configuration");
 
     this.format = new CsvFormatImpl();
-    this.type = config.getAttribute("class", Class.class);
-    if(this.type == null) {
-      throw new ConfigException("Invalid CSV descriptor configuration. Missing <class> attribute.");
-    }
+    this.type = getType(config);
     if(!this.type.equals(type)) {
       throw new ConfigException("Invalid CSV descriptor configuration. Configured <class> attribute does not match descriptor type.");
     }
@@ -78,10 +70,6 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
 
   private void config(Config config) throws ConfigException
   {
-    if(!Classes.isInstantiable(this.type)) {
-      throw new ConfigException("Invalid CSV descriptor configuration. Not instantiable bound class.");
-    }
-
     if(config.hasAttribute("delimiter")) {
       format.delimiter(charEnum(config, "delimiter", CsvDelimiter.class).value());
     }
@@ -242,7 +230,28 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
 
   // ----------------------------------------------------------------------------------------------
 
-  private static <E extends Enum<E>> CharEnum charEnum(Config config, String attr, Class<E> enumType)
+  private static <T> Class<T> getType(Config config) throws ConfigException
+  {
+    String className = config.getAttribute("class");
+    if(className == null) {
+      throw new ConfigException("Invalid CSV descriptor configuration. Missing <class> attribute.");
+    }
+
+    Class<T> type;
+    try {
+      type = Classes.forNameEx(className);
+    }
+    catch(ClassNotFoundException e) {
+      throw new ConfigException("Invalid CSV descriptor configuration. Class |%s| not found.", className);
+    }
+
+    if(!Classes.isInstantiable(type)) {
+      throw new ConfigException("Invalid CSV descriptor configuration. Not instantiable class |%s|.", type);
+    }
+    return type;
+  }
+
+  private static <E extends Enum<E>> CharEnum charEnum(Config config, String attr, Class<E> enumType) throws ConfigException
   {
     class Char implements CharEnum
     {
@@ -264,7 +273,12 @@ public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
     if(value.length() == 1) {
       return new Char(value.charAt(0));
     }
-    return (CharEnum)Enum.valueOf(enumType, value);
+    try {
+      return (CharEnum)Enum.valueOf(enumType, value);
+    }
+    catch(IllegalArgumentException e) {
+      throw new ConfigException(e.getMessage());
+    }
   }
 
   private static final class CsvColumnImpl implements CsvColumn
