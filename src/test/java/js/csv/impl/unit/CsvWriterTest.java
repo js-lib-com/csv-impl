@@ -1,7 +1,7 @@
 package js.csv.impl.unit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -76,7 +76,8 @@ public class CsvWriterTest
   }
 
   @Test
-  public void escape() throws IOException {
+  public void escape() throws IOException
+  {
     CsvDescriptorImpl<Person> descriptor = new CsvDescriptorImpl<>(format, Person.class);
     descriptor.columns("name", "address");
 
@@ -91,7 +92,8 @@ public class CsvWriterTest
   }
 
   @Test
-  public void nullValue() throws IOException {
+  public void nullValue() throws IOException
+  {
     CsvDescriptorImpl<Person> descriptor = new CsvDescriptorImpl<>(format, Person.class);
     descriptor.columns("name", "address");
 
@@ -106,7 +108,8 @@ public class CsvWriterTest
   }
 
   @Test
-  public void formatter() throws IOException {
+  public void formatter() throws IOException
+  {
     CsvDescriptorImpl<Person> descriptor = new CsvDescriptorImpl<>(format, Person.class);
     descriptor.column("name", new NameFormat());
     descriptor.column("address");
@@ -122,7 +125,8 @@ public class CsvWriterTest
   }
 
   @Test
-  public void byteStream() throws IOException {
+  public void byteStream() throws IOException
+  {
     CsvDescriptorImpl<Person> descriptor = new CsvDescriptorImpl<>(format, Person.class);
     descriptor.column("name", new NameFormat());
     descriptor.column("address");
