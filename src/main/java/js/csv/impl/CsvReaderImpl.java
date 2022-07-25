@@ -24,6 +24,7 @@ import js.format.Format;
 import js.log.Log;
 import js.log.LogFactory;
 import js.util.Classes;
+import js.util.Params;
 import js.util.Strings;
 
 public class CsvReaderImpl<T> implements CsvReader<T>
@@ -48,8 +49,15 @@ public class CsvReaderImpl<T> implements CsvReader<T>
    */
   public CsvReaderImpl(CsvDescriptor<T> descriptor, InputStream stream)
   {
-    this(descriptor, new BufferedReader(new InputStreamReader(stream, descriptor.format().charset())));
+    this(descriptor, reader(stream, descriptor));
     log.trace("CsvReaderImpl(CsvDescriptor<T>,InputStream)");
+  }
+
+  private static Reader reader(InputStream stream, CsvDescriptor<?> descriptor)
+  {
+    Params.notNull(descriptor, "CSV descriptor");
+    Params.notNull(descriptor.format(), "CSV descriptor format");
+    return new BufferedReader(new InputStreamReader(stream, descriptor.format().charset()));
   }
 
   /**
