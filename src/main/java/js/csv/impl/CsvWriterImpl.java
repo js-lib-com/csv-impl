@@ -6,14 +6,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+
 import js.converter.Converter;
 import js.converter.ConverterRegistry;
 import js.csv.CsvColumn;
 import js.csv.CsvDescriptor;
 import js.csv.CsvFormat;
 import js.csv.CsvWriter;
-import js.log.Log;
-import js.log.LogFactory;
 import js.util.Classes;
 import js.util.Params;
 

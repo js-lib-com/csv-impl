@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+
 import js.converter.Converter;
 import js.converter.ConverterException;
 import js.converter.ConverterRegistry;
@@ -21,8 +24,6 @@ import js.csv.CsvException;
 import js.csv.CsvFormat;
 import js.csv.CsvReader;
 import js.format.Format;
-import js.log.Log;
-import js.log.LogFactory;
 import js.util.Classes;
 import js.util.Params;
 import js.util.Strings;
