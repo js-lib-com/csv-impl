@@ -1,27 +1,27 @@
-package js.csv.impl;
+package com.jslib.csv;
 
-import static js.util.Params.notNull;
+import static com.jslib.util.Params.notNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import js.csv.CharEnum;
-import js.csv.CsvColumn;
-import js.csv.CsvComment;
-import js.csv.CsvDelimiter;
-import js.csv.CsvDescriptor;
-import js.csv.CsvEscape;
-import js.csv.CsvException;
-import js.csv.CsvFormat;
-import js.csv.CsvQuote;
-import js.format.Format;
-import js.lang.Config;
-import js.lang.ConfigException;
-import js.util.Classes;
-import js.util.Params;
-import js.util.Strings;
+import com.jslib.api.csv.CharEnum;
+import com.jslib.api.csv.CsvColumn;
+import com.jslib.api.csv.CsvComment;
+import com.jslib.api.csv.CsvDelimiter;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.api.csv.CsvEscape;
+import com.jslib.api.csv.CsvException;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvQuote;
+import com.jslib.format.Format;
+import com.jslib.lang.Config;
+import com.jslib.lang.ConfigException;
+import com.jslib.util.Classes;
+import com.jslib.util.Params;
+import com.jslib.util.Strings;
 
 public class CsvDescriptorImpl<T> implements CsvDescriptor<T>
 {

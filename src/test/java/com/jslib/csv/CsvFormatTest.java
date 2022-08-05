@@ -1,4 +1,4 @@
-package js.csv.impl.unit;
+package com.jslib.csv;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,10 +13,9 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import js.csv.CsvComment;
-import js.csv.CsvFormat;
-import js.csv.CsvQuote;
-import js.csv.impl.CsvFormatImpl;
+import com.jslib.api.csv.CsvComment;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvQuote;
 
 public class CsvFormatTest
 {

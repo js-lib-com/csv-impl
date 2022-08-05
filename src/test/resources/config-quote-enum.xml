@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<config class="js.csv.impl.fixture.Person" quote="SINGLE_QUOTATION">
+<config class="com.jslib.csv.fixture.Person" quote="SINGLE_QUOTATION">
 	<column field="name" />
 </config>

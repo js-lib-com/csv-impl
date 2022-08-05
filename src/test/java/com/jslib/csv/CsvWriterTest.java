@@ -1,4 +1,4 @@
-package js.csv.impl.unit;
+package com.jslib.csv;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,14 +10,11 @@ import java.io.StringWriter;
 import org.junit.Before;
 import org.junit.Test;
 
-import js.csv.CsvDelimiter;
-import js.csv.CsvQuote;
-import js.csv.CsvWriter;
-import js.csv.impl.CsvDescriptorImpl;
-import js.csv.impl.CsvFormatImpl;
-import js.csv.impl.CsvWriterImpl;
-import js.csv.impl.fixture.NameFormat;
-import js.csv.impl.fixture.Person;
+import com.jslib.api.csv.CsvDelimiter;
+import com.jslib.api.csv.CsvQuote;
+import com.jslib.api.csv.CsvWriter;
+import com.jslib.csv.fixture.NameFormat;
+import com.jslib.csv.fixture.Person;
 
 public class CsvWriterTest
 {

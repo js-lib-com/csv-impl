@@ -1,4 +1,4 @@
-package js.csv.impl.unit;
+package com.jslib.csv;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -19,14 +19,13 @@ import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import js.csv.CsvColumn;
-import js.csv.CsvDescriptor;
-import js.csv.impl.CsvDescriptorImpl;
-import js.csv.impl.fixture.NameFormat;
-import js.csv.impl.fixture.Person;
-import js.lang.ConfigBuilder;
-import js.lang.ConfigException;
-import js.util.Classes;
+import com.jslib.api.csv.CsvColumn;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.csv.fixture.NameFormat;
+import com.jslib.csv.fixture.Person;
+import com.jslib.lang.ConfigBuilder;
+import com.jslib.lang.ConfigException;
+import com.jslib.util.Classes;
 
 public class CsvDescriptorTest
 {

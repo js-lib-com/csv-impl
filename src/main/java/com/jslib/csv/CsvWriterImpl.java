@@ -1,4 +1,4 @@
-package js.csv.impl;
+package com.jslib.csv;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -6,17 +6,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import com.jslib.api.csv.CsvColumn;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvWriter;
 import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
-
-import js.converter.Converter;
-import js.converter.ConverterRegistry;
-import js.csv.CsvColumn;
-import js.csv.CsvDescriptor;
-import js.csv.CsvFormat;
-import js.csv.CsvWriter;
-import js.util.Classes;
-import js.util.Params;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterRegistry;
+import com.jslib.util.Classes;
+import com.jslib.util.Params;
 
 public class CsvWriterImpl<T> implements CsvWriter<T>
 {

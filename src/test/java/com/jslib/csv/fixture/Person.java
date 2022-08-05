@@ -1,6 +1,6 @@
-package js.csv.impl.fixture;
+package com.jslib.csv.fixture;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public class Person
 {

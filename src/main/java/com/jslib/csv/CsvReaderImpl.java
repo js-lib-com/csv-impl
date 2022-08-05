@@ -1,4 +1,4 @@
-package js.csv.impl;
+package com.jslib.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,21 +12,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.jslib.api.csv.CsvColumn;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.api.csv.CsvException;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvReader;
 import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
-
-import js.converter.Converter;
-import js.converter.ConverterException;
-import js.converter.ConverterRegistry;
-import js.csv.CsvColumn;
-import js.csv.CsvDescriptor;
-import js.csv.CsvException;
-import js.csv.CsvFormat;
-import js.csv.CsvReader;
-import js.format.Format;
-import js.util.Classes;
-import js.util.Params;
-import js.util.Strings;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
+import com.jslib.converter.ConverterRegistry;
+import com.jslib.format.Format;
+import com.jslib.util.Classes;
+import com.jslib.util.Params;
+import com.jslib.util.Strings;
 
 public class CsvReaderImpl<T> implements CsvReader<T>
 {

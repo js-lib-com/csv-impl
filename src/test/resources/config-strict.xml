@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<config class="js.csv.impl.fixture.Person" strict="true">
+<config class="com.jslib.csv.fixture.Person" strict="true">
 	<column field="name" />
 </config>

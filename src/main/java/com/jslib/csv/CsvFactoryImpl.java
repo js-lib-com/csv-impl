@@ -1,16 +1,16 @@
-package js.csv.impl;
+package com.jslib.csv;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-import js.csv.CsvDescriptor;
-import js.csv.CsvFactory;
-import js.csv.CsvReader;
-import js.csv.CsvWriter;
-import js.lang.Config;
-import js.lang.ConfigException;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.api.csv.CsvFactory;
+import com.jslib.api.csv.CsvReader;
+import com.jslib.api.csv.CsvWriter;
+import com.jslib.lang.Config;
+import com.jslib.lang.ConfigException;
 
 public class CsvFactoryImpl implements CsvFactory
 {

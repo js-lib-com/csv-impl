@@ -1,4 +1,4 @@
-package js.csv.impl.unit;
+package com.jslib.csv;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -18,21 +18,18 @@ import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
 
-import js.csv.CsvDelimiter;
-import js.csv.CsvDescriptor;
-import js.csv.CsvEscape;
-import js.csv.CsvException;
-import js.csv.CsvFormat;
-import js.csv.CsvQuote;
-import js.csv.CsvReader;
-import js.csv.impl.CsvDescriptorImpl;
-import js.csv.impl.CsvFormatImpl;
-import js.csv.impl.CsvReaderImpl;
-import js.csv.impl.fixture.Employee;
-import js.csv.impl.fixture.ExceptionalFormat;
-import js.csv.impl.fixture.NameFormat;
-import js.csv.impl.fixture.Person;
-import js.util.Classes;
+import com.jslib.api.csv.CsvDelimiter;
+import com.jslib.api.csv.CsvDescriptor;
+import com.jslib.api.csv.CsvEscape;
+import com.jslib.api.csv.CsvException;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvQuote;
+import com.jslib.api.csv.CsvReader;
+import com.jslib.csv.fixture.Employee;
+import com.jslib.csv.fixture.ExceptionalFormat;
+import com.jslib.csv.fixture.NameFormat;
+import com.jslib.csv.fixture.Person;
+import com.jslib.util.Classes;
 
 public class CsvReaderTest
 {

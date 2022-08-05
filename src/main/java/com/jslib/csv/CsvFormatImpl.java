@@ -1,13 +1,13 @@
-package js.csv.impl;
+package com.jslib.csv;
 
 import java.nio.charset.Charset;
 
-import js.csv.CsvComment;
-import js.csv.CsvDelimiter;
-import js.csv.CsvEscape;
-import js.csv.CsvFormat;
-import js.csv.CsvQuote;
-import js.util.Params;
+import com.jslib.api.csv.CsvComment;
+import com.jslib.api.csv.CsvDelimiter;
+import com.jslib.api.csv.CsvEscape;
+import com.jslib.api.csv.CsvFormat;
+import com.jslib.api.csv.CsvQuote;
+import com.jslib.util.Params;
 
 public class CsvFormatImpl implements CsvFormat
 {

@@ -1,8 +1,8 @@
-package js.csv.impl.fixture;
+package com.jslib.csv.fixture;
 
 import java.text.ParseException;
 
-import js.format.Format;
+import com.jslib.format.Format;
 
 public abstract class AbstractFormat implements Format
 {

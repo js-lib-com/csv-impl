@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<config class="js.csv.impl.fixture.Person">
-	<column property="name" format="js.csv.impl.fixture.NameFormat" />
+<config class="com.jslib.csv.fixture.Person">
+	<column property="name" format="com.jslib.csv.fixture.NameFormat" />
 	<column property="address" />
 </config>

@@ -1,4 +1,4 @@
-package js.csv.impl.fixture;
+package com.jslib.csv.fixture;
 
 public class Employee extends Person
 {
