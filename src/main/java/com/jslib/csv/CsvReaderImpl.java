@@ -175,7 +175,7 @@ public class CsvReaderImpl<T> implements CsvReader<T>
         if(format.header() && !headerProcessed) {
           headerProcessed = true;
           if(values == null) {
-            log.info("Empty CSV stream for type |%s|.", descriptor.type());
+            log.info("Empty CSV stream for type |{java_type}|.", descriptor.type());
             return null;
           }
           descriptor.load(values);
